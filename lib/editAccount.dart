@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:blog_app/home_page.dart';
 
-class EditAccount extends StatelessWidget {
+class AccountPage extends StatefulWidget {
+  const AccountPage({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Edit Account",
-      home: EditProfilePage(),
-    );
-  }
+  State<AccountPage> createState() => _AccountPageState();
 }
 
-class EditProfilePage extends StatefulWidget {
-  @override
-  _EditProfilePageState createState() => _EditProfilePageState();
-}
-
-class _EditProfilePageState extends State<EditProfilePage> {
+class _AccountPageState extends State<AccountPage> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
@@ -28,33 +20,46 @@ class _EditProfilePageState extends State<EditProfilePage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back, 
-          color: Colors.lightBlue,),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.lightBlue,
+          ),
         ),
-        title: Text('Edit Profile', style: TextStyle(color: Colors.black),),
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           PopupMenuButton(
             itemBuilder: (BuildContext context) => [
-          PopupMenuItem(
-            child: Text('Pilihan 1'),
-            value: 1,
-          ),
-          PopupMenuItem(
-            child: Text('Pilihan 2'),
-            value: 2,
-          ),
-          PopupMenuItem(
-            child: Text('Pilihan 3'),
-            value: 3,
-          ),
+              PopupMenuItem(
+                child: Text('Pilihan 1'),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text('Pilihan 2'),
+                value: 2,
+              ),
+              PopupMenuItem(
+                child: Text('Pilihan 3'),
+                value: 3,
+              ),
             ],
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.lightBlue, // mengubah warna titik tiga menjadi hitam
+            icon: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const HomePage();
+                    },
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.lightBlue,
+              ),
             ),
-            onSelected: (value) {
-              // melakukan sesuatu setelah memilih opsi dari menu
-            },
           ),
         ],
       ),
@@ -129,8 +134,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)
-                      ),
+                          borderRadius: BorderRadius.circular(20)),
                     ),
                     onPressed: () {},
                     child: Text("CANCEL",
@@ -143,10 +147,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       primary: Colors.lightBlue,
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                     ),
                     child: Text(
                       "SAVE",
@@ -188,9 +192,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             contentPadding: EdgeInsets.only(bottom: 3),
             labelText: labelText,
             labelStyle: TextStyle(
-              color: Colors.black, // mengubah warna teks label menjadi hitam
-              fontSize: 18
-            ),
+                color: Colors.black, // mengubah warna teks label menjadi hitam
+                fontSize: 18),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
             hintStyle: TextStyle(

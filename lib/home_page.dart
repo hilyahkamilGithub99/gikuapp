@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:blog_app/description_page.dart';
+import 'package:blog_app/editAccount.dart';
 import 'package:blog_app/main.dart';
+import 'package:blog_app/settings.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -26,6 +28,19 @@ class HomePage extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) {
+                      return const AccountPage();
+                    }),
+                  );
+                },
+                leading: const Icon(Icons.account_circle),
+                title: const Text(
+                  "Account",
                 ),
               ),
               ListTile(
@@ -67,6 +82,19 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) {
+                      return const settingsPage();
+                    }),
+                  );
+                },
+                leading: const Icon(Icons.settings),
+                title: const Text(
+                  "Settings",
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) {
                       return const LoginPage();
                     }),
                   );
@@ -91,7 +119,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {},
-                    style: ElevatedButton.styleFrom(
+                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 6, 67, 117),
                       foregroundColor: Colors.white,
                       shape: const StadiumBorder(),
