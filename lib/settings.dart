@@ -1,5 +1,6 @@
 import 'package:blog_app/home_page.dart';
 import 'package:flutter/material.dart';
+import 'profile.dart';
 
 class settingsPage extends StatefulWidget {
   const settingsPage({super.key});
@@ -13,7 +14,8 @@ class _settingsPageState extends State<settingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: const Color.fromARGB(255, 6, 67, 117),
+        foregroundColor: Colors.white,
         elevation: 1,
         leading: IconButton(
           onPressed: () {
@@ -27,12 +29,12 @@ class _settingsPageState extends State<settingsPage> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.lightBlue,
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
         ),
         title: Text(
           'Settings',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
         ),
         actions: [
           PopupMenuButton(
@@ -52,8 +54,8 @@ class _settingsPageState extends State<settingsPage> {
             ],
             icon: Icon(
               Icons.more_vert,
-              color:
-                  Colors.lightBlue, // mengubah warna titik tiga menjadi hitam
+              color: Color.fromARGB(255, 255, 255,
+                  255), // mengubah warna titik tiga menjadi hitam
             ),
             onSelected: (value) {
               // melakukan sesuatu setelah memilih opsi dari menu
@@ -65,34 +67,59 @@ class _settingsPageState extends State<settingsPage> {
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
           children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.lightBlue,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'Akun',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
             Divider(
               height: 15,
               thickness: 2,
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2016/03/29/03/14/portrait-1287421_960_720.jpg"),
-                  ),
-                  SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Faried Yoga Prawira',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Lihat Profil',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'images/logo.png',
+                      height: 80,
+                      width: 80,
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Faried Yoga Prawira',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Lihat Profil',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -108,7 +135,7 @@ class _settingsPageState extends State<settingsPage> {
                   width: 8,
                 ),
                 Text(
-                  'General',
+                  'Umum',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -120,11 +147,9 @@ class _settingsPageState extends State<settingsPage> {
             SizedBox(
               height: 10,
             ),
-            buildAccountOptionRow(context, "Notifications"),
-            buildAccountOptionRow(context, "Cards"),
-            buildAccountOptionRow(context, "Cards"),
-            buildAccountOptionRow(context, "About"),
-            buildAccountOptionRow(context, "Log Out"),
+            buildAccountOptionRow(context, "Bahasa"),
+            buildAccountOptionRow(context, "Privasi"),
+            buildAccountOptionRow(context, "Tentang"),
             SizedBox(
               height: 50,
             ),
@@ -134,39 +159,40 @@ class _settingsPageState extends State<settingsPage> {
     );
   }
 
-  GestureDetector buildAccountOptionRow(BuildContext context, String title) {
-    return GestureDetector(
+  InkWell buildAccountOptionRow(BuildContext context, String title) {
+    return InkWell(
       onTap: () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(title),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Option 1"),
-                    Text("Option 2"),
-                    Text("Option 3")
-                  ],
-                ),
-                actions: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Close",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Option 1"),
+                  Text("Option 2"),
+                  Text("Option 3")
                 ],
-              );
-            });
+              ),
+              actions: [
+                FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Close",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  backgroundColor: Colors.white,
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

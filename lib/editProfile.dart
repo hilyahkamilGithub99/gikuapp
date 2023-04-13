@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:blog_app/home_page.dart';
+import 'settings.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
-
+class EditProfilePage extends StatefulWidget {
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  _EditProfilePageState createState() => _EditProfilePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: const Color.fromARGB(255, 6, 67, 117),
+        foregroundColor: Colors.white,
         elevation: 1,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
+        ),
         title: Text(
-          'Edit Profile',
-          style: TextStyle(color: Colors.black),
+          'Edit Profil',
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
         ),
         actions: [
           PopupMenuButton(
@@ -36,21 +44,14 @@ class _AccountPageState extends State<AccountPage> {
                 value: 3,
               ),
             ],
-            icon: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const HomePage();
-                    },
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.arrow_forward,
-                color: Colors.lightBlue,
-              ),
+            icon: Icon(
+              Icons.more_vert,
+              color:
+                  Colors.lightBlue, // mengubah warna titik tiga menjadi hitam
             ),
+            onSelected: (value) {
+              // melakukan sesuatu setelah memilih opsi dari menu
+            },
           ),
         ],
       ),
@@ -111,10 +112,10 @@ class _AccountPageState extends State<AccountPage> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Name", "Write Your Name", false),
-              buildTextField("E-mail", "Write Your E-mail", false),
-              buildTextField("Password", "Write Your Password", true),
-              buildTextField("Location", "Set Location", false),
+              buildTextField("Nama Lengkap", "Email Anda", false),
+              buildTextField("Email", "Email", false),
+              buildTextField("Password", "Password", true),
+              buildTextField("Alamat", "Alamat", false),
               SizedBox(
                 height: 35,
               ),

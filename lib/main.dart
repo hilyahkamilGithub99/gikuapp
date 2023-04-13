@@ -1,4 +1,6 @@
+import 'package:blog_app/home.dart';
 import 'package:blog_app/home_page.dart';
+import 'package:blog_app/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,7 +29,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 6, 67, 117),
+      backgroundColor: Color.fromARGB(255, 68, 160, 235),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,16 +44,20 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
             const Text(
-              'Giku App',
+              'Giku Apps',
               style: TextStyle(
                 fontSize: 35,
                 fontWeight: FontWeight.bold,
                 color: Colors.white70,
               ),
             ),
-            const SizedBox(height: 15.0),
-            Image.asset('images/bgk.jpg'),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
+            Image.asset(
+              'images/logo.png',
+              height: 150,
+              width: 150,
+            ),
+            const SizedBox(height: 10.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -62,7 +68,7 @@ class LoginPage extends StatelessWidget {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const HomePage();
+                      return LoginScreen();
                     },
                   ),
                 );
@@ -75,7 +81,7 @@ class LoginPage extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
+                backgroundColor: Color.fromARGB(255, 5, 82, 145),
                 minimumSize: const Size(300.0, 40.0),
               ),
               onPressed: () {},
