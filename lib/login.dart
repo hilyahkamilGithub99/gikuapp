@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:blog_app/home_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:blog_app/admin.dart';
+import 'package:blog_app/user.dart';
 
-import 'settings.dart';
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,6 +11,58 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
+  String status = '';
+
+  String alert = "Ready for Login";
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController usernameInput = TextEditingController();
+  TextEditingController passwordInput = TextEditingController();
+
+  void loginProcess() async {
+    print("Login button pressed");
+    if (_formKey.currentState!.validate()) {
+      final response = await http.post(
+        Uri.parse("http://172.31.6.91/login/login.php"),
+        body: {
+          "username": usernameInput.text,
+          "password": passwordInput.text,
+        },
+      );
+
+      var dataUser = json.decode(response.body);
+
+      if (dataUser.length < 1) {
+        setState(() {
+          alert = "You can't login";
+        });
+      } else {
+        setState(() {
+          username = dataUser[0]["username"];
+          password = dataUser[0]["password"];
+          status = dataUser[0]["status"];
+        });
+
+        if (status == "admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Admin(username: username),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => User(username: username),
+            ),
+          );
+        }
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,53 +85,84 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 24.0),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Email or Phone Number',
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: usernameInput,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black87),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.mail,
+                            size: 40,
+                          ),
+                          hintText: "Enter your username",
+                          hintStyle: TextStyle(color: Colors.black87),
+                          labelText: "Username",
+                          labelStyle: TextStyle(color: Colors.black87),
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Username is empty";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: passwordInput,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black87),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            size: 40,
+                          ),
+                          hintText: "Enter your password",
+                          hintStyle: TextStyle(color: Colors.black87),
+                          labelText: "Password",
+                          labelStyle: TextStyle(color: Colors.black87),
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Password is empty";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      Card(
+                        color: Colors.black87,
+                        elevation: 5,
+                        child: Container(
+                          height: 50,
+                          child: InkWell(
+                            splashColor: Colors.white,
+                            onTap: () {
+                              loginProcess();
+                            },
+                            child: Center(
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  contentPadding: EdgeInsets.all(16.0),
                 ),
-              ),
-              SizedBox(height: 16.0),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: EdgeInsets.all(16.0),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-                },
-                child: Text('Log In'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.lightBlue,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 32.0,
-                    vertical: 16.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
               SizedBox(height: 16.0),
               TextButton(
                 onPressed: () {},
