@@ -1,92 +1,96 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:blog_app/admin.dart';
-import 'package:blog_app/user.dart';
-import 'package:blog_app/signup.dart';
-
 import 'dart:convert';
 
-class LoginScreen extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:blog_app/login.dart';
+
+
+class Signup extends StatefulWidget {
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _SignupState createState() => _SignupState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupState extends State<Signup> {
   String username = '';
   String password = '';
-  String status = '';
-
-  String alert = "Ready for Login";
+  String selectedStatus = 'pasien'; // Default status: user
+  String alert = "Ready for Signup";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController usernameInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
 
-  void loginProcess() async {
-    print("Login button pressed");
+  void signupProcess() async {
+    print("Signup button pressed");
     if (_formKey.currentState!.validate()) {
       final response = await http.post(
-        Uri.parse("http://172.31.7.38/login/login.php"),
+        Uri.parse("http://172.31.7.38/login/signup.php"),
         body: {
           "username": usernameInput.text,
           "password": passwordInput.text,
+          "status": selectedStatus, // Menggunakan selectedStatus sebagai status akun
         },
       );
 
-      var dataUser = json.decode(response.body);
+      var data = json.decode(response.body);
+      print(response.body);
 
-      if (dataUser.length < 1) {
+      if (data['status'] == "success") {
         setState(() {
-          alert = "You can't login";
+          alert = "Registration successful";
         });
+        // Pindah ke halaman login setelah registrasi sukses
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
       } else {
         setState(() {
-          username = dataUser[0]["username"];
-          password = dataUser[0]["password"];
-          status = dataUser[0]["status"];
+          alert = "Registration failed";
         });
-
-        if (status == "dokter") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Admin(username: username),
-            ),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => User(username: username),
-            ),
-          );
-        }
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'images/logo.png',
-                height: 80,
-                width: 80,
-              ),
-              Text(
-                "Giku Apps",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.lightBlue,
+      body: Container(
+        padding: const EdgeInsets.all(8),
+        width: MediaQuery.of(context).size.width,
+        color: Colors.lightBlue,
+        child: ListView(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 24.0),
-              Form(
+                SizedBox(height: 15),
+                Text(
+                  "Registration",
+                  style: TextStyle(fontSize: 20, color: Colors.black87),
+                ),
+                SizedBox(height: 15),
+                Text(
+                  alert,
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(height: 15),
+                Form(
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
@@ -139,6 +143,36 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       SizedBox(height: 20),
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black87),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.category,
+                            size: 40,
+                          ),
+                          hintText: "Select your account type",
+                          hintStyle: TextStyle(color: Colors.black87),
+                          labelText: "Account Type",
+                          labelStyle: TextStyle(color: Colors.black87),
+                        ),
+                        value: selectedStatus,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedStatus = newValue!;
+                          });
+                        },
+                        items: <String>['pasien', 'dokter']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(height: 20),
                       Card(
                         color: Colors.black87,
                         elevation: 5,
@@ -147,11 +181,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                             splashColor: Colors.white,
                             onTap: () {
-                              loginProcess();
+                              signupProcess();
                             },
                             child: Center(
                               child: Text(
-                                "Login",
+                                "Signup",
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
@@ -164,59 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-              SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: Colors.lightBlue[800],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Divider(),
-                  ),
-                  SizedBox(width: 8.0),
-                  Text('or'),
-                  SizedBox(width: 8.0),
-                  Expanded(
-                    child: Divider(),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Don\'t have an account?'),
-                  SizedBox(width: 8.0),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Signup(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: Colors.lightBlue[800],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );
