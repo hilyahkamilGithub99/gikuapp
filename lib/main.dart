@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:blog_app/home.dart';
 import 'package:blog_app/home_page.dart';
 import 'package:blog_app/login.dart';
+import 'package:blog_app/widgets/list_pasien/tambah_pasien/table.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
