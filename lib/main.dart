@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:blog_app/home.dart';
 import 'package:blog_app/home_page.dart';
 import 'package:blog_app/login.dart';
 import 'package:flutter/material.dart';
+import 'package:blog_app/signup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,12 +68,9 @@ class LoginPage extends StatelessWidget {
                 minimumSize: const Size(300.0, 40.0),
               ),
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return LoginScreen();
-                    },
-                  ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
                 );
               },
               child: const Text(
@@ -84,7 +84,12 @@ class LoginPage extends StatelessWidget {
                 backgroundColor: Color.fromARGB(255, 5, 82, 145),
                 minimumSize: const Size(300.0, 40.0),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Signup()),
+                );
+              },
               child: const Text(
                 "Sign up",
               ),

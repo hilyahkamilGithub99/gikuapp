@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:blog_app/login.dart';
+import 'profiles.dart';
+import 'profile_list.dart';
 
 class Admin extends StatefulWidget {
+  final int id;
   final String username;
+  final String status;
 
-  Admin({required this.username});
+  Admin({required this.username, required this.id, required this.status});
 
   @override
   _AdminState createState() => _AdminState();
@@ -19,7 +23,7 @@ class _AdminState extends State<Admin> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Admin"),
+              Text("status : ${widget.status}"),
               SizedBox(height: 20),
               Text("Welcome : ${widget.username}"),
               SizedBox(height: 20),
@@ -30,6 +34,25 @@ class _AdminState extends State<Admin> {
                   );
                 },
                 child: Text("Keluar"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => AddProfileScreen(id: widget.id, username: widget.username, status: widget.status)),
+                  );
+                },
+                child: Text("tambahkan biodata"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileList(id: widget.id),
+                    ),
+                  );
+                },
+                child: Text("lihat biodata"),
               )
             ],
           ),
